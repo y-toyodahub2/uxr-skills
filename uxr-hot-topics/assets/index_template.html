@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>UXR Insight Cards · Index</title>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-sub: #5a5a5a;
+    --ink-mute: #8a8a8a;
+    --line: #ececec;
+    --accent-pay:    #E84A3F;
+    --accent-mobile: #D9A21F;
+    --accent-coin:   #2F5BC9;
+    --accent-money:  #6D49A3;
+    --tag-bg: #f1efe9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .lib-wrap {
+    max-width: 1180px; margin: 0 auto;
+    padding: 36px 28px 56px;
+  }
+  .lib-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px; margin-bottom: 22px;
+  }
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.18em;
+    color: var(--ink-sub); font-weight: 700;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 26px; line-height: 1.2;
+    margin: 6px 0 0; letter-spacing: 0.01em;
+  }
+  .lib-meta {
+    font-size: 11.5px; color: var(--ink-mute);
+    text-align: right; line-height: 1.5;
+  }
+  .lib-meta .count {
+    font-family: "SF Mono", "Menlo", monospace;
+    color: var(--ink-sub); font-weight: 700;
+  }
+
+  .lib-controls {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    margin-bottom: 20px;
+  }
+  .controls-label {
+    font-size: 10.5px; letter-spacing: 0.14em;
+    color: var(--ink-mute); text-transform: uppercase;
+    margin-right: 2px;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; padding: 5px 11px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card); color: var(--ink-sub);
+    cursor: pointer; user-select: none;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .chip:hover { border-color: var(--ink-sub); }
+  .chip.is-active {
+    border-color: var(--ink); color: var(--ink);
+    background: #eee9dd; font-weight: 700;
+  }
+  .chip .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .chip[data-domain="pay"] .dot    { background: var(--accent-pay); }
+  .chip[data-domain="mobile"] .dot { background: var(--accent-mobile); }
+  .chip[data-domain="coin"] .dot   { background: var(--accent-coin); }
+  .chip[data-domain="money"] .dot  { background: var(--accent-money); }
+  .chip-divider { width: 1px; height: 16px; background: var(--line); margin: 0 4px; }
+
+  .lib-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .lib-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 18px;
+    position: relative; overflow: hidden;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+    display: block;
+  }
+  .lib-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: var(--card-accent, var(--accent-pay));
+  }
+  .lib-card.pay    { --card-accent: var(--accent-pay); }
+  .lib-card.mobile { --card-accent: var(--accent-mobile); }
+  .lib-card.coin   { --card-accent: var(--accent-coin); }
+  .lib-card.money  { --card-accent: var(--accent-money); }
+  .lib-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--card-accent);
+    box-shadow: 0 12px 24px -16px rgba(0,0,0,0.18);
+  }
+
+  .lib-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 6px; margin-bottom: 8px;
+  }
+  .domain-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 9px 3px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.04em; line-height: 1;
+  }
+  .domain-tag svg { flex-shrink: 0; }
+  .domain-pay    { background: #FEDED9; color: #A92E22; }
+  .domain-mobile { background: #FFF1C2; color: #8A6A00; }
+  .domain-coin   { background: #DDE5FA; color: #1F47A8; }
+  .domain-money  { background: #EBE0F5; color: #5A3D8C; }
+  .report-code {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 10px; color: var(--card-accent);
+    font-weight: 700; letter-spacing: 0.1em;
+    margin: 4px 0 6px;
+  }
+  .lib-card h3 {
+    font-size: 14.5px; font-weight: 700;
+    line-height: 1.4; margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .lib-summary {
+    font-size: 11.5px; color: var(--ink-sub);
+    line-height: 1.55;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .lib-tags-row {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px dashed var(--line);
+  }
+  .theme-tag {
+    display: inline-block; font-size: 10px;
+    color: var(--ink-sub); background: var(--tag-bg);
+    padding: 2px 7px; border-radius: 999px; line-height: 1.4;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    text-align: center;
+    color: var(--ink-mute);
+    font-size: 13px;
+  }
+
+  .lib-footer {
+    margin-top: 36px; padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 11px; color: var(--ink-mute);
+    display: flex; justify-content: space-between;
+  }
+
+  @media (max-width: 600px) {
+    .lib-wrap { padding: 24px 16px 40px; }
+    h1 { font-size: 20px; }
+    .lib-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lib-wrap">
+
+  <div class="lib-header">
+    <div>
+      <div class="eyebrow">UXR · Insight Cards</div>
+      <h1>All cards</h1>
+    </div>
+    <div class="lib-meta">
+      <div><span class="count" id="cardCount">{{TOTAL_COUNT}}</span> cards</div>
+      <div>updated {{UPDATED_DATE}}</div>
+    </div>
+  </div>
+
+  <div class="lib-controls">
+    <span class="controls-label">Domain</span>
+    <button class="chip is-active" data-filter="all">All</button>
+    <button class="chip" data-filter="pay" data-domain="pay"><span class="dot"></span>メルペイ</button>
+    <button class="chip" data-filter="mobile" data-domain="mobile"><span class="dot"></span>メルカリモバイル</button>
+    <button class="chip" data-filter="coin" data-domain="coin"><span class="dot"></span>メルコイン</button>
+    <button class="chip" data-filter="money" data-domain="money"><span class="dot"></span>スマートマネー</button>
+  </div>
+
+  <div class="lib-grid" id="grid">
+
+    {{LIB_CARDS_HTML}}
+
+  </div>
+
+  <div class="lib-footer">
+    <div>UXR Insight Cards · /uxr-hot-topics</div>
+    <div>気になったカードはクリック→詳細へ</div>
+  </div>
+
+</div>
+
+<script>
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.lib-card');
+  const countEl = document.getElementById('cardCount');
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+
+      const f = chip.dataset.filter;
+      let visible = 0;
+      cards.forEach(card => {
+        const show = (f === 'all') || (card.dataset.domain === f);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      countEl.textContent = visible;
+    });
+  });
+</script>
+
+</body>
+</html>
