@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>借り換え意向の促進/阻害要因 · UXR Insight Card</title>
+<meta name="uxr-domain" content="money">
+<meta name="uxr-themes" content="借入行動,スマートマネー,借り換え">
+<meta name="uxr-report-code" content="2602_SM_借り換え">
+<meta name="uxr-card-title" content="借り換え意向の促進/阻害要因">
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-sub: #5a5a5a;
+    --ink-mute: #8a8a8a;
+    --line: #ececec;
+    --accent: #6D49A3; /* スマートマネー */
+    --tag-bg: #f1efe9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(246,245,241,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .topbar .left { display: flex; align-items: center; gap: 14px; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--ink-sub); font-weight: 600;
+  }
+  .back-link:hover { color: var(--ink); }
+  .deck-title { font-weight: 700; letter-spacing: 0.04em; }
+  .topbar .right {
+    font-family: "SF Mono", "Menlo", monospace;
+    color: var(--ink-mute); font-size: 11px; letter-spacing: 0.08em;
+  }
+
+  .card-page {
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 28px 24px 32px;
+  }
+  .card-large {
+    width: 100%; max-width: 720px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 32px 26px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02), 0 20px 40px -28px rgba(0,0,0,0.3);
+  }
+  .card-large::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 5px; background: var(--accent);
+  }
+
+  .meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .domain-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em; line-height: 1;
+    background: #EBE0F5; color: #5A3D8C;
+  }
+  .domain-tag svg { flex-shrink: 0; }
+  .card-id {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 11px; color: var(--accent);
+    font-weight: 700; letter-spacing: 0.12em;
+  }
+
+  .title-block { margin-bottom: 14px; }
+  .report-code {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 10.5px; color: var(--accent);
+    font-weight: 700; letter-spacing: 0.12em; opacity: .75;
+  }
+  h2.card-title {
+    font-size: 20px; font-weight: 800;
+    line-height: 1.35; letter-spacing: 0.01em;
+    margin: 4px 0 0; color: var(--ink);
+  }
+
+  .section { margin-top: 14px; }
+  .section-label {
+    display: inline-block; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.16em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  .objective {
+    font-size: 12.5px; color: var(--ink-sub);
+    background: #fafaf7;
+    border-left: 3px solid var(--accent);
+    padding: 9px 12px;
+    border-radius: 0 6px 6px 0;
+    line-height: 1.6;
+  }
+  .insights { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .insight {
+    display: grid; grid-template-columns: 22px 1fr;
+    gap: 10px; font-size: 12.5px; line-height: 1.55; color: var(--ink);
+  }
+  .insight-num {
+    width: 19px; height: 19px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .insight strong { color: var(--ink); font-weight: 700; }
+  .reco { display: flex; flex-direction: column; gap: 5px; margin: 0; padding: 0; list-style: none; }
+  .reco li {
+    font-size: 12.5px; line-height: 1.55;
+    padding-left: 18px; position: relative; color: var(--ink);
+  }
+  .reco li::before {
+    content: "→"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-weight: 700;
+  }
+
+  .tags-row {
+    margin-top: 18px; padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  }
+  .tags-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; color: var(--ink-mute);
+    text-transform: uppercase; margin-right: 4px;
+  }
+  .theme-tag {
+    display: inline-block; font-size: 11px;
+    color: var(--ink-sub); background: var(--tag-bg);
+    padding: 3px 9px; border-radius: 999px; line-height: 1.4;
+  }
+
+  @media (max-width: 720px) {
+    .card-large { padding: 32px 24px 28px; border-radius: 14px; }
+    h2.card-title { font-size: 22px; }
+    .topbar { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="left">
+    <a class="back-link" href="index.html">← All cards</a>
+    <div class="deck-title">UXR Insight Cards</div>
+  </div>
+  <div class="right">2602 / money</div>
+</div>
+
+<main class="card-page">
+  <article class="card-large">
+    <div class="meta-row">
+      <div class="domain-tag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9.5V21m0-11.5L6 4m6 5.5L18 4M6 15h12M6 11h12"/></svg>
+        スマートマネー
+      </div>
+      <div class="card-id">CARD · 2602_MONEY_01</div>
+    </div>
+
+    <div class="title-block">
+      <div class="report-code">2602_SM_借り換え</div>
+      <h2 class="card-title">借り換え意向の促進/阻害要因</h2>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Objective</div>
+      <div class="objective">複数社から借入中のお客さまの生活全体の不安/不満、メルペイスマートマネーを<strong>「借り換え先」</strong>として選ぶ際の促進/阻害要因を明らかにする。</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Key Insight</div>
+      <ul class="insights">
+        <li class="insight"><span class="insight-num">1</span><span><strong>借り換えの仕組み自体が認知されていない。</strong>課題仮説だった「追加借入れができない制約」自体が理解されていない可能性が高い。</span></li>
+        <li class="insight"><span class="insight-num">2</span><span>返済額は <strong>生活費に影響のない範囲</strong>で設定しているため、返済が難しい・生活費の支払いが滞る感覚はない。</span></li>
+        <li class="insight"><span class="insight-num">3</span><span><strong>借り換えで返済額が減るのか懐疑的</strong>。申込や既存借入先とのやり取りなど手間を超えるメリットを感じない。</span></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Recommendation</div>
+      <ul class="reco">
+        <li><strong>「借り換え対応可能」</strong>を商品説明ページ・申込フロー冒頭で明示し認知を高める。</li>
+        <li><strong>借り換え専用の申込ガイド</strong>（手順・必要情報・想定期間）を提供し手続き不安を軽減。</li>
+      </ul>
+    </div>
+
+    <div class="tags-row">
+      <span class="tags-label">Themes</span>
+      <span class="theme-tag">#借入行動</span>
+      <span class="theme-tag">#スマートマネー</span>
+      <span class="theme-tag">#借り換え</span>
+    </div>
+  </article>
+</main>
+
+</body>
+</html>

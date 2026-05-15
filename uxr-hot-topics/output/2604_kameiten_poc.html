@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>特約加盟店PoC – NF/CB未達要因の特定 · UXR Insight Card</title>
+<meta name="uxr-domain" content="pay">
+<meta name="uxr-themes" content="決済行動,メルペイ,特約加盟店">
+<meta name="uxr-report-code" content="2604_特約加盟店PoC">
+<meta name="uxr-card-title" content="特約加盟店PoC – NF/CB未達要因の特定">
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-sub: #5a5a5a;
+    --ink-mute: #8a8a8a;
+    --line: #ececec;
+    --accent: #E84A3F; /* メルペイ */
+    --tag-bg: #f1efe9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(246,245,241,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .topbar .left { display: flex; align-items: center; gap: 14px; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--ink-sub); font-weight: 600;
+  }
+  .back-link:hover { color: var(--ink); }
+  .deck-title { font-weight: 700; letter-spacing: 0.04em; }
+  .deck-title .sub { color: var(--ink-mute); font-weight: 400; margin-left: 6px; }
+  .topbar .right {
+    font-family: "SF Mono", "Menlo", monospace;
+    color: var(--ink-mute); font-size: 11px; letter-spacing: 0.08em;
+  }
+
+  .card-page {
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 28px 24px 16px;
+  }
+  .card-large {
+    width: 100%; max-width: 720px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 32px 26px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02), 0 20px 40px -28px rgba(0,0,0,0.3);
+  }
+  .card-large::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 5px; background: var(--accent);
+  }
+
+  .meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .domain-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em; line-height: 1;
+    background: #FEDED9; color: #A92E22;
+  }
+  .domain-tag svg { flex-shrink: 0; }
+  .card-id {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 11px; color: var(--accent);
+    font-weight: 700; letter-spacing: 0.12em;
+  }
+
+  .title-block { margin-bottom: 14px; }
+  .report-code {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 10.5px; color: var(--accent);
+    font-weight: 700; letter-spacing: 0.12em; opacity: .75;
+  }
+  h2.card-title {
+    font-size: 20px; font-weight: 800;
+    line-height: 1.35; letter-spacing: 0.01em;
+    margin: 4px 0 0; color: var(--ink);
+  }
+  .byline {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    font-size: 12px; color: var(--ink-mute); align-items: center;
+  }
+  .byline strong { color: var(--ink-sub); font-weight: 700; }
+  .byline .sep {
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--ink-mute); opacity: .5;
+  }
+
+  .section { margin-top: 14px; }
+  .section-label {
+    display: inline-block; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.16em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  .objective {
+    font-size: 12.5px; color: var(--ink-sub);
+    background: #fafaf7;
+    border-left: 3px solid var(--accent);
+    padding: 9px 12px;
+    border-radius: 0 6px 6px 0;
+    line-height: 1.6;
+  }
+  .insights { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .insight {
+    display: grid; grid-template-columns: 22px 1fr;
+    gap: 10px; font-size: 12.5px; line-height: 1.55; color: var(--ink);
+  }
+  .insight-num {
+    width: 19px; height: 19px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .insight strong { color: var(--ink); font-weight: 700; }
+  .reco { display: flex; flex-direction: column; gap: 5px; margin: 0; padding: 0; list-style: none; }
+  .reco li {
+    font-size: 12.5px; line-height: 1.55;
+    padding-left: 18px; position: relative; color: var(--ink);
+  }
+  .reco li::before {
+    content: "→"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-weight: 700;
+  }
+
+  .tags-row {
+    margin-top: 18px; padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  }
+  .tags-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; color: var(--ink-mute);
+    text-transform: uppercase; margin-right: 4px;
+  }
+  .theme-tag {
+    display: inline-block; font-size: 11px;
+    color: var(--ink-sub); background: var(--tag-bg);
+    padding: 3px 9px; border-radius: 999px; line-height: 1.4;
+  }
+
+  .card-nav {
+    max-width: 720px; margin: 0 auto;
+    padding: 0 24px 28px;
+    display: flex; justify-content: space-between; gap: 12px;
+  }
+  .card-nav a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 11.5px; color: var(--ink-sub);
+    transition: border-color .2s, color .2s;
+  }
+  .card-nav a:hover { border-color: var(--ink); color: var(--ink); }
+  .card-nav .spacer { flex: 1; }
+  .card-nav .label {
+    font-size: 10px; color: var(--ink-mute);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    display: block; margin-bottom: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .card-large { padding: 32px 24px 28px; border-radius: 14px; }
+    h2.card-title { font-size: 22px; }
+    .topbar { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="left">
+    <a class="back-link" href="index.html">← All cards</a>
+    <div class="deck-title">UXR Insight Cards</div>
+  </div>
+  <div class="right">2604 / pay</div>
+</div>
+
+<main class="card-page">
+  <article class="card-large">
+    <div class="meta-row">
+      <div class="domain-tag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        メルペイ
+      </div>
+      <div class="card-id">CARD · 2604_PAY_01</div>
+    </div>
+
+    <div class="title-block">
+      <div class="report-code">2604_特約加盟店PoC</div>
+      <h2 class="card-title">特約加盟店PoC – NF/CB未達要因の特定</h2>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Objective</div>
+      <div class="objective">特約加盟店（ダイソー・くら寿司・Amazon）PoCにおける <strong>New Face / Come Back 層の利用未達</strong>（目標比 NF 32%、CB 40%）の要因を、認知・興味・利用の各ファネルで特定し改善示唆を得る。</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Key Insight</div>
+      <ul class="insights">
+        <li class="insight"><span class="insight-num">1</span><span><strong>"慣れた支払い手段"が最大の壁。</strong>未利用理由トップは「使い慣れた手段を利用したかった」。特典の魅力不足より <em>支払い手段スイッチのコスト（習慣・安心・手間）</em> が勝っている。</span></li>
+        <li class="insight"><span class="insight-num">2</span><span><strong>原資保有が決済の絶対条件。</strong>売上金があると意思決定が一気に進むが、残高がないと参加が成立しない（メルペイを自分ごと化できない）。</span></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Recommendation</div>
+      <ul class="reco">
+        <li>店頭だけでなく <strong>アプリ内（お知らせ/LP）と連動</strong> し、「自分が対象・今使うと得」を <strong>決済直前</strong> に分かる形で提示（想起・確認の設計）。</li>
+        <li><strong>未完了タスク（残高/本人確認/支払い設定）を可視化</strong>し、店頭に出向く前に決済レディな状態・選択肢に入っている状態を形成（スイッチ成功確率UP）。</li>
+      </ul>
+    </div>
+
+    <div class="tags-row">
+      <span class="tags-label">Themes</span>
+      <span class="theme-tag">#決済行動</span>
+      <span class="theme-tag">#メルペイ</span>
+      <span class="theme-tag">#特約加盟店</span>
+    </div>
+  </article>
+</main>
+
+</body>
+</html>

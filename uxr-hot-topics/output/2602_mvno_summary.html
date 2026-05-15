@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>メルカリモバイル利用者解像度向上調査 · UXR Insight Card</title>
+<meta name="uxr-domain" content="mobile">
+<meta name="uxr-themes" content="通信契約,メルカリモバイル,寄せ活">
+<meta name="uxr-report-code" content="2602_MVNO-利用者解像度向上調査">
+<meta name="uxr-card-title" content="メルカリモバイル利用者解像度向上調査">
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-sub: #5a5a5a;
+    --ink-mute: #8a8a8a;
+    --line: #ececec;
+    --accent: #D9A21F; /* メルカリモバイル */
+    --tag-bg: #f1efe9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(246,245,241,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .topbar .left { display: flex; align-items: center; gap: 14px; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--ink-sub); font-weight: 600;
+  }
+  .back-link:hover { color: var(--ink); }
+  .deck-title { font-weight: 700; letter-spacing: 0.04em; }
+  .topbar .right {
+    font-family: "SF Mono", "Menlo", monospace;
+    color: var(--ink-mute); font-size: 11px; letter-spacing: 0.08em;
+  }
+
+  .card-page {
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 28px 24px 32px;
+  }
+  .card-large {
+    width: 100%; max-width: 720px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 32px 26px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02), 0 20px 40px -28px rgba(0,0,0,0.3);
+  }
+  .card-large::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 5px; background: var(--accent);
+  }
+
+  .meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .domain-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em; line-height: 1;
+    background: #FFF1C2; color: #8A6A00;
+  }
+  .domain-tag svg { flex-shrink: 0; }
+  .card-id {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 11px; color: var(--accent);
+    font-weight: 700; letter-spacing: 0.12em;
+  }
+
+  .title-block { margin-bottom: 14px; }
+  .report-code {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 10.5px; color: var(--accent);
+    font-weight: 700; letter-spacing: 0.12em; opacity: .75;
+  }
+  h2.card-title {
+    font-size: 20px; font-weight: 800;
+    line-height: 1.35; letter-spacing: 0.01em;
+    margin: 4px 0 0; color: var(--ink);
+  }
+
+  .section { margin-top: 14px; }
+  .section-label {
+    display: inline-block; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.16em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  .objective {
+    font-size: 12.5px; color: var(--ink-sub);
+    background: #fafaf7;
+    border-left: 3px solid var(--accent);
+    padding: 9px 12px;
+    border-radius: 0 6px 6px 0;
+    line-height: 1.6;
+  }
+  .insights { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .insight {
+    display: grid; grid-template-columns: 22px 1fr;
+    gap: 10px; font-size: 12.5px; line-height: 1.55; color: var(--ink);
+  }
+  .insight-num {
+    width: 19px; height: 19px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .insight strong { color: var(--ink); font-weight: 700; }
+
+  .tags-row {
+    margin-top: 18px; padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  }
+  .tags-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; color: var(--ink-mute);
+    text-transform: uppercase; margin-right: 4px;
+  }
+  .theme-tag {
+    display: inline-block; font-size: 11px;
+    color: var(--ink-sub); background: var(--tag-bg);
+    padding: 3px 9px; border-radius: 999px; line-height: 1.4;
+  }
+
+  @media (max-width: 720px) {
+    .card-large { padding: 32px 24px 28px; border-radius: 14px; }
+    h2.card-title { font-size: 22px; }
+    .topbar { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="left">
+    <a class="back-link" href="index.html">← All cards</a>
+    <div class="deck-title">UXR Insight Cards</div>
+  </div>
+  <div class="right">2602 / mobile</div>
+</div>
+
+<main class="card-page">
+  <article class="card-large">
+    <div class="meta-row">
+      <div class="domain-tag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+        メルカリモバイル
+      </div>
+      <div class="card-id">CARD · 2602_MOBILE_01</div>
+    </div>
+
+    <div class="title-block">
+      <div class="report-code">2602_MVNO-利用者解像度向上調査</div>
+      <h2 class="card-title">メルカリモバイル利用者解像度向上調査</h2>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Objective</div>
+      <div class="objective">メルカリモバイル契約者の特性・契約動機・継続意向を定量/定性で把握。<strong>「ついで契約」を促す意思決定プロセス</strong>と契約後の<strong>「寄せ活」（メルカリへの決済集約）</strong>の実態を明らかにする。</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Key Insight</div>
+      <ul class="insights">
+        <li class="insight"><span class="insight-num">1</span><span>契約者は<strong>メルカリ好意度・新サービス利用意向が高く、通信リテラシーも高い</strong>層が中心。一方、契約前は <strong>61.5%</strong> が「良いものがあれば変えてもいい」程度の意識。</span></li>
+        <li class="insight"><span class="insight-num">2</span><span>契約トリガーは通信品質より<strong>「すぐに享受できる金銭的ベネフィット」</strong>が強い。「元々欲しかった商品が1万円安く買える」など具体的・即時報酬に動機づけられる。</span></li>
+        <li class="insight"><span class="insight-num">3</span><span>寄せ活の理由上位は<strong>ポイント還元・支払い一本化・年間特典</strong>。モバイル契約だけが寄せ活の主動機ではないが、毎月の支払い発生が結果的に一本化を後押し。</span></li>
+      </ul>
+    </div>
+
+    <div class="tags-row">
+      <span class="tags-label">Themes</span>
+      <span class="theme-tag">#通信契約</span>
+      <span class="theme-tag">#メルカリモバイル</span>
+      <span class="theme-tag">#寄せ活</span>
+    </div>
+  </article>
+</main>
+
+</body>
+</html>

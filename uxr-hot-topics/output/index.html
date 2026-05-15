@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>UXR Insight Cards · Index</title>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-sub: #5a5a5a;
+    --ink-mute: #8a8a8a;
+    --line: #ececec;
+    --accent-pay:    #E84A3F;
+    --accent-mobile: #D9A21F;
+    --accent-coin:   #2F5BC9;
+    --accent-money:  #6D49A3;
+    --tag-bg: #f1efe9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .lib-wrap {
+    max-width: 1180px; margin: 0 auto;
+    padding: 36px 28px 56px;
+  }
+  .lib-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px; margin-bottom: 22px;
+  }
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.18em;
+    color: var(--ink-sub); font-weight: 700;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 26px; line-height: 1.2;
+    margin: 6px 0 0; letter-spacing: 0.01em;
+  }
+  .lib-meta {
+    font-size: 11.5px; color: var(--ink-mute);
+    text-align: right; line-height: 1.5;
+  }
+  .lib-meta .count {
+    font-family: "SF Mono", "Menlo", monospace;
+    color: var(--ink-sub); font-weight: 700;
+  }
+
+  .lib-controls {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    margin-bottom: 20px;
+  }
+  .controls-label {
+    font-size: 10.5px; letter-spacing: 0.14em;
+    color: var(--ink-mute); text-transform: uppercase;
+    margin-right: 2px;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; padding: 5px 11px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card); color: var(--ink-sub);
+    cursor: pointer; user-select: none;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .chip:hover { border-color: var(--ink-sub); }
+  .chip.is-active {
+    border-color: var(--ink); color: var(--ink);
+    background: #eee9dd; font-weight: 700;
+  }
+  .chip .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .chip[data-domain="pay"] .dot    { background: var(--accent-pay); }
+  .chip[data-domain="mobile"] .dot { background: var(--accent-mobile); }
+  .chip[data-domain="coin"] .dot   { background: var(--accent-coin); }
+  .chip[data-domain="money"] .dot  { background: var(--accent-money); }
+  .chip-divider { width: 1px; height: 16px; background: var(--line); margin: 0 4px; }
+
+  .lib-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .lib-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 18px;
+    position: relative; overflow: hidden;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+    display: block;
+  }
+  .lib-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: var(--card-accent, var(--accent-pay));
+  }
+  .lib-card.pay    { --card-accent: var(--accent-pay); }
+  .lib-card.mobile { --card-accent: var(--accent-mobile); }
+  .lib-card.coin   { --card-accent: var(--accent-coin); }
+  .lib-card.money  { --card-accent: var(--accent-money); }
+  .lib-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--card-accent);
+    box-shadow: 0 12px 24px -16px rgba(0,0,0,0.18);
+  }
+
+  .lib-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 6px; margin-bottom: 8px;
+  }
+  .domain-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 9px 3px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.04em; line-height: 1;
+  }
+  .domain-tag svg { flex-shrink: 0; }
+  .domain-pay    { background: #FEDED9; color: #A92E22; }
+  .domain-mobile { background: #FFF1C2; color: #8A6A00; }
+  .domain-coin   { background: #DDE5FA; color: #1F47A8; }
+  .domain-money  { background: #EBE0F5; color: #5A3D8C; }
+  .report-code {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 10px; color: var(--card-accent);
+    font-weight: 700; letter-spacing: 0.1em;
+    margin: 4px 0 6px;
+  }
+  .lib-card h3 {
+    font-size: 14.5px; font-weight: 700;
+    line-height: 1.4; margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .lib-summary {
+    font-size: 11.5px; color: var(--ink-sub);
+    line-height: 1.55;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .lib-tags-row {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px dashed var(--line);
+  }
+  .theme-tag {
+    display: inline-block; font-size: 10px;
+    color: var(--ink-sub); background: var(--tag-bg);
+    padding: 2px 7px; border-radius: 999px; line-height: 1.4;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    text-align: center;
+    color: var(--ink-mute);
+    font-size: 13px;
+  }
+
+  .lib-footer {
+    margin-top: 36px; padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 11px; color: var(--ink-mute);
+    display: flex; justify-content: space-between;
+  }
+
+  @media (max-width: 600px) {
+    .lib-wrap { padding: 24px 16px 40px; }
+    h1 { font-size: 20px; }
+    .lib-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lib-wrap">
+
+  <div class="lib-header">
+    <div>
+      <div class="eyebrow">UXR · Insight Cards</div>
+      <h1>All cards</h1>
+    </div>
+    <div class="lib-meta">
+      <div><span class="count" id="cardCount">7</span> cards</div>
+      <div>updated 2026.05.14</div>
+    </div>
+  </div>
+
+  <div class="lib-controls">
+    <span class="controls-label">Domain</span>
+    <button class="chip is-active" data-filter="all">All</button>
+    <button class="chip" data-filter="pay" data-domain="pay"><span class="dot"></span>メルペイ</button>
+    <button class="chip" data-filter="mobile" data-domain="mobile"><span class="dot"></span>メルカリモバイル</button>
+    <button class="chip" data-filter="coin" data-domain="coin"><span class="dot"></span>メルコイン</button>
+    <button class="chip" data-filter="money" data-domain="money"><span class="dot"></span>スマートマネー</button>
+  </div>
+
+  <div class="lib-grid" id="grid">
+
+    <!-- CARD: pay / 2604_特約加盟店PoC -->
+    <a class="lib-card pay" href="2604_kameiten_poc.html"
+       data-domain="pay"
+       data-themes="決済行動,メルペイ,特約加盟店">
+      <div class="lib-card-head">
+        <span class="domain-tag domain-pay">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+          メルペイ
+        </span>
+      </div>
+      <div class="report-code">2604_特約加盟店PoC</div>
+      <h3>特約加盟店PoC – NF/CB未達要因の特定</h3>
+      <p class="lib-summary">特約加盟店PoCにおける NF/CB 層の利用未達の要因を、認知・興味・利用の各ファネルで特定。"慣れた支払い手段"スイッチコストと原資保有の二大壁が浮かび上がった。</p>
+      <div class="lib-tags-row">
+        <span class="theme-tag">#決済行動</span>
+        <span class="theme-tag">#メルペイ</span>
+        <span class="theme-tag">#特約加盟店</span>
+      </div>
+    </a>
+
+    <!-- CARD: mobile / 2604_MVNO_端末PoC2 -->
+    <a class="lib-card mobile" href="2604_mvno_tanmatsu.html"
+       data-domain="mobile"
+       data-themes="購買行動,メルカリモバイル,中古端末">
+      <div class="lib-card-head">
+        <span class="domain-tag domain-mobile">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          メルカリモバイル
+        </span>
+      </div>
+      <div class="report-code">2604_MVNO_端末PoC2</div>
+      <h3>中古端末セット販売 – 訴求/導線設計</h3>
+      <p class="lib-summary">中古端末を探すお客さま向けに、端末セット販売の訴求・導線設計を検証。まず端末単体の価格メリット、その後に回線セットへつなぐ順序が自然と判明。</p>
+      <div class="lib-tags-row">
+        <span class="theme-tag">#購買行動</span>
+        <span class="theme-tag">#メルカリモバイル</span>
+        <span class="theme-tag">#中古端末</span>
+      </div>
+    </a>
+
+    <!-- CARD: pay / 2603_増えるおサイフ -->
+    <a class="lib-card pay" href="2603_fueru_osaifu.html"
+       data-domain="pay"
+       data-themes="お金の認識,メルペイ,おサイフタブ">
+      <div class="lib-card-head">
+        <span class="domain-tag domain-pay">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+          メルペイ
+        </span>
+      </div>
+      <div class="report-code">202603_増えるおサイフ</div>
+      <h3>増えるおサイフ – 情報設計検証</h3>
+      <p class="lib-summary">おサイフタブの情報設計を検証。メルカリのお金はFlow(使うお金)と認識され、Stock(置いておくお金)を共存させるとモード切替コストが発生し自分ごと化されない。</p>
+      <div class="lib-tags-row">
+        <span class="theme-tag">#お金の認識</span>
+        <span class="theme-tag">#メルペイ</span>
+        <span class="theme-tag">#おサイフタブ</span>
+      </div>
+    </a>
+
+    <!-- CARD: coin / 2603_HYBS_Day0~Day7 -->
+    <a class="lib-card coin" href="2603_hybs_tsumitate.html"
+       data-domain="coin"
+       data-themes="オンボーディング,メルコイン,つみたて">
+      <div class="lib-card-head">
+        <span class="domain-tag domain-coin">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"/></svg>
+          メルコイン
+        </span>
+      </div>
+      <div class="report-code">2603_HYBS_Day0~Day7</div>
+      <h3>口座開設後1週間以内につみたて設定する人のジャーニー</h3>
+      <p class="lib-summary">理想ジャーニーを解明。つみたては「投資ができていない自分を片付ける役割」、シミュレーションは「価格下落時の予防接種」として機能していた。</p>
+      <div class="lib-tags-row">
+        <span class="theme-tag">#オンボーディング</span>
+        <span class="theme-tag">#メルコイン</span>
+        <span class="theme-tag">#つみたて</span>
+      </div>
+    </a>
+
+    <!-- CARD: pay / 2603_Otoku全体体験 -->
+    <a class="lib-card pay" href="2603_otoku_pay.html"
+       data-domain="pay"
+       data-themes="決済行動,メルペイ,無限決済">
+      <div class="lib-card-head">
+        <span class="domain-tag domain-pay">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+          メルペイ
+        </span>
+      </div>
+      <div class="report-code">2603_Otoku全体体験</div>
+      <h3>Otoku全体体験 – 無限決済を起点にOuter Pay/カード発行へ</h3>
+      <p class="lib-summary">無限決済を起点にOuter Pay/カード発行モチベーション創出を検証。3/4名で楽しさ→優先利用へ、2/4名でカード発行意向UP。Buy↔Pay接続に改善余地。</p>
+      <div class="lib-tags-row">
+        <span class="theme-tag">#決済行動</span>
+        <span class="theme-tag">#メルペイ</span>
+        <span class="theme-tag">#無限決済</span>
+      </div>
+    </a>
+
+    <!-- CARD: mobile / 2602_MVNO-利用者解像度向上調査 -->
+    <a class="lib-card mobile" href="2602_mvno_summary.html"
+       data-domain="mobile"
+       data-themes="通信契約,メルカリモバイル,寄せ活">
+      <div class="lib-card-head">
+        <span class="domain-tag domain-mobile">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          メルカリモバイル
+        </span>
+      </div>
+      <div class="report-code">2602_MVNO-利用者解像度向上調査</div>
+      <h3>メルカリモバイル利用者解像度向上調査</h3>
+      <p class="lib-summary">契約者の特性・契約動機・寄せ活の実態を解明。契約者は通信リテラシーが高く、契約トリガーは品質より即時の金銭メリット（"1万円安く買える"等）。</p>
+      <div class="lib-tags-row">
+        <span class="theme-tag">#通信契約</span>
+        <span class="theme-tag">#メルカリモバイル</span>
+        <span class="theme-tag">#寄せ活</span>
+      </div>
+    </a>
+
+    <!-- CARD: money / 2602_SM_借り換え -->
+    <a class="lib-card money" href="2602_sm_karikae.html"
+       data-domain="money"
+       data-themes="借入行動,スマートマネー,借り換え">
+      <div class="lib-card-head">
+        <span class="domain-tag domain-money">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9.5V21m0-11.5L6 4m6 5.5L18 4M6 15h12M6 11h12"/></svg>
+          スマートマネー
+        </span>
+      </div>
+      <div class="report-code">2602_SM_借り換え</div>
+      <h3>借り換え意向の促進/阻害要因</h3>
+      <p class="lib-summary">メルペイスマートマネーを"借り換え先"として選ぶ際の促進/阻害要因を解明。仕組み自体の認知不足と、返済額メリットへの懐疑が二大壁。</p>
+      <div class="lib-tags-row">
+        <span class="theme-tag">#借入行動</span>
+        <span class="theme-tag">#スマートマネー</span>
+        <span class="theme-tag">#借り換え</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="lib-footer">
+    <div>UXR Insight Cards · /uxr-hot-topics</div>
+    <div>気になったカードはクリック→詳細へ</div>
+  </div>
+
+</div>
+
+<script>
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.lib-card');
+  const countEl = document.getElementById('cardCount');
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+
+      const f = chip.dataset.filter;
+      let visible = 0;
+      cards.forEach(card => {
+        const show = (f === 'all') || (card.dataset.domain === f);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      countEl.textContent = visible;
+    });
+  });
+</script>
+
+</body>
+</html>
